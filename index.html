@@ -1,8 +1,19 @@
 <head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script>
     // insert script
+    $(document).ready(function(){
+      $("button").click(function(){
+        $.get("https://api.foursquare.com/v2/users/self/checkins?oauth_token=EKPQAGKVMLBNB2VCDWREWFSJJHNCRGRQEEEKJTJ10JS5E0WY&v=20140921",function(data,status){
+          alert("Data: " + data + "\nStatus: " + status);
+          document.getElementById("JSON").innerHTML = JSON.stringify(data);
+        });
+      });
+    });
   </script>
 </head>
 <body>
   <h1>allthecheckins</h1>
+  <button>Send an HTTP GET request to a page and get the result back</button>
+  <div id = "JSON"></div>
 </body>

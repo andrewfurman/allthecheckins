@@ -3,7 +3,7 @@
   <script>
     $(document).ready(function(){
       $("button").click(function(){
-        $.get("https://api.foursquare.com/v2/users/self/checkins?oauth_token=OBEVILMBTU1WE4W25DSKHNQQOQ4EWANK0YQINOFK0MLGLMNJ&v=20140921",function(data,status){
+        $.get("https://api.foursquare.com/v2/users/self/checkins?oauth_token=TOKEN&v=20140921",function(data,status){
           parseCheckins(data);
         });
       });

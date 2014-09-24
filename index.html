@@ -1,19 +1,22 @@
 <head>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script>
-    // insert script
     $(document).ready(function(){
       $("button").click(function(){
-        $.get("https://api.foursquare.com/v2/users/self/checkins?oauth_token=TOKEN REMOVED&v=20140921",function(data,status){
-          alert("Data: " + data + "\nStatus: " + status);
-          document.getElementById("JSON").innerHTML = JSON.stringify(data);
+        $.get("https://api.foursquare.com/v2/users/self/checkins?oauth_token=OBEVILMBTU1WE4W25DSKHNQQOQ4EWANK0YQINOFK0MLGLMNJ&v=20140921",function(data,status){
+          parseCheckins(data);
         });
       });
     });
+    function parseCheckins(data){
+      
+      document.getElementById("JSON").innerHTML = JSON.stringify(data);
+    }
   </script>
 </head>
 <body>
   <h1>allthecheckins</h1>
   <button>Send an HTTP GET request to a page and get the result back</button>
+  <div id = checkins></div>
   <div id = "JSON"></div>
 </body>

@@ -2,8 +2,11 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script>
     $(document).ready(function(){
+     window.location.href.replace(/[#&]+([^=&]+)=([^&]*)/gi, function(m,key,value) { map[key] = value;});
+      var requestUrl = "https://api.foursquare.com/v2/users/self/checkins?v=20140921"
+      requestUrl+= "&oauth_token="+map['access_token'];
       $("button").click(function(){
-        $.get("https://api.foursquare.com/v2/users/self/checkins?oauth_token=TOKEN&v=20140921",function(data,status){
+        $.get(requestUrl,function(data,status){
           parseCheckins(data);
         });
       });

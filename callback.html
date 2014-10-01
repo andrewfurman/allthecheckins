@@ -2,21 +2,54 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script>
     var token, map = {}, checkins = [];
-         window.location.href.replace(/[#&]+([^=&]+)=([^&]*)/gi, function(m,key,value) { map[key] = value;});
-      var requestUrl = "https://api.foursquare.com/v2/users/self/checkins?v=20140921";
-      requestUrl+= "&oauth_token="+map['access_token'];
+    window.location.href.replace(/[#&]+([^=&]+)=([^&]*)/gi, function(m,key,value) { map[key] = value;});
+    var requestUrl = "https://api.foursquare.com/v2/users/self/checkins?v=20140930&limit=250";
+    requestUrl+= "&oauth_token="+map['access_token'];
     $(document).ready(function(){
         $.get(requestUrl,function(data,status){
           parseCheckins(data);
         });
     });
     function parseCheckins(data){
-      document.getElementById("JSON").innerHTML = JSON.stringify(data);
+      if(data.meta.code != 200) {
+		alert('error: '+data.meta.errorDetail);
+	}
+	var checkinsData = data.response.checkins.items;
+	//document.getElementById('jsonOutput').innerHTML = JSON.stringify(data);
+	for (var i=0; i<checkinsData.length-1;i++) {
+		checkinObject = new Object();
+		try{
+			//insert venue info that might be optional
+			checkinObject.id = checkinsData[i].id;
+			checkinObject.createdAt = checkinsData[i].createdAt;
+			var myDate = new Date( checkinObject.createdAt *1000);
+			checkinObject.createdAt = myDate.toLocaleString();
+			checkinObject.venueName = checkinsData[i].venue.name;
+			checkinObject.venueId = checkinsData[i].venue.id;
+			checkinObject.venueAddress = checkinsData[i].venue.location.address;
+			checkinObject.venueCity = checkinsData[i].venue.location.city+', '+checkinsData[i].venue.location.state+' '+checkinsData[i].venue.location.postalCode;
+			checkinObject.latitude = checkinsData[i].venue.location.lat;
+			checkinObject.longitude = checkinsData[i].venue.location.lng;
+			checkinObject.icon = checkinsData[i].venue.categories[0].icon.prefix +'bg_32'+ checkinsData[i].venue.categories[0].icon.suffix;
+			checkins.push(checkinObject);
+			console.log("checkinObject.id");
+	 	}catch(err){}
+	}
+	var listOfCheckins = "";
+	for(var i = 0; i<checkins.length; i++){
+		listOfCheckins += '<br/>' + (i+1);
+		listOfCheckins += '<img src=\"'+checkins[i].icon+'\" alt=\"icon\"/>'+'\t';
+		listOfCheckins += '<strong>  </strong>: '+checkins[i].venueName+''+'\t';
+		listOfCheckins += '<strong>Datetime</strong>: '+checkins[i].createdAt+'\t';
+		listOfCheckins += '<strong>Address</strong>: '+checkins[i].venueAddress+'\t';
+		listOfCheckins += '<strong>City</strong>: '+checkins[i].venueCity+'\t';
+	}
+	document.getElementById('checkinList').innerHTML = listOfCheckins;
     }
   </script>
 </head>
 <body>
   <h1>allthecheckins</h1>
-  <div id = checkins></div>
+  <div id = checkinList></div>
   <div id = "JSON"></div>
 </body>

@@ -1,25 +1,22 @@
 <head>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script>
-    $(document).ready(function(){
-     window.location.href.replace(/[#&]+([^=&]+)=([^&]*)/gi, function(m,key,value) { map[key] = value;});
-      var requestUrl = "https://api.foursquare.com/v2/users/self/checkins?v=20140921"
+    var token, map = {}, checkins = [];
+         window.location.href.replace(/[#&]+([^=&]+)=([^&]*)/gi, function(m,key,value) { map[key] = value;});
+      var requestUrl = "https://api.foursquare.com/v2/users/self/checkins?v=20140921";
       requestUrl+= "&oauth_token="+map['access_token'];
-      $("button").click(function(){
+    $(document).ready(function(){
         $.get(requestUrl,function(data,status){
           parseCheckins(data);
         });
-      });
     });
     function parseCheckins(data){
-      
       document.getElementById("JSON").innerHTML = JSON.stringify(data);
     }
   </script>
 </head>
 <body>
   <h1>allthecheckins</h1>
-  <button>Send an HTTP GET request to a page and get the result back</button>
   <div id = checkins></div>
   <div id = "JSON"></div>
 </body>
